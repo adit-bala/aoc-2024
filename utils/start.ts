@@ -39,9 +39,12 @@ try {
 const boilerplate = `// Advent of Code ${year} - Day ${args.day}
 
 const input = await Deno.readTextFile("./input.txt");
+const testinput = await Deno.readTextFile("./test.txt");
+
 
 // Split the input into lines and skip the first line (AOC INPUT FETCHED marker)
 const lines = input.split("\\n").slice(1);
+const testlines = testinput.split("\\n");
 
 // Your code here
 for (const line of lines) {
@@ -64,3 +67,8 @@ console.log(`Created ${mainFile}`);
 const inputFile = `${dayFolder}/input.txt`;
 await Deno.writeTextFile(inputFile, "");
 console.log(`Created ${inputFile}`);
+
+// Create empty test.txt
+const testFile = `${dayFolder}/test.txt`;
+await Deno.writeTextFile(testFile, "");
+console.log(`Created ${testFile}`);
