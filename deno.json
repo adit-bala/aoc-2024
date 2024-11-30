@@ -1,0 +1,13 @@
+{
+  "tasks": {
+    "year": "deno run --allow-write utils/year.ts",
+    "start": "deno run --allow-read --allow-write utils/start.ts",
+    "fetch": "deno run --allow-net --allow-run --allow-read --allow-write --allow-env --env-file=.env utils/fetch.ts",
+    "run": "deno run --allow-read --allow-run utils/run.ts"
+  },
+  "imports": {
+    "@std/cli": "jsr:@std/cli@^1.0.7",
+    "@std/dotenv": "jsr:@std/dotenv@^0.225.2",
+    "@std/fs": "jsr:@std/fs@^1.0.6"
+  }
+}
