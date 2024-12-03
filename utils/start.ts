@@ -43,7 +43,7 @@ const testinput = await Deno.readTextFile("./test.txt");
 
 
 // Split the input into lines and skip the first line (AOC INPUT FETCHED marker)
-const lines = input.split("\\n").slice(1);
+const lines = input.split("\\n");
 const testlines = testinput.split("\\n");
 
 // Your code here
