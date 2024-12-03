@@ -8,46 +8,44 @@ const lines = input.split("\n");
 const testlines = testinput.split("\n");
 
 // Your code here
-let sum = 0;
-
 const mul = /mul\(\d{1,3},\d{1,3}\)/g; // Global regex
-const matches = input.match(mul);
-if (matches) {
-  sum += matches.map((match) =>
-    match.slice(4, -1).split(",").map(Number).reduce(
-      (acc, curr) => acc * curr,
-      1,
-    )
-  ).reduce((acc, curr) => acc + curr, 0);
-}
+const sum = input
+  .match(mul)
+  ?.map((match) =>
+    match
+      .slice(4, -1)
+      .split(",")
+      .map(Number)
+      .reduce((acc, curr) => acc * curr, 1)
+  )
+  .reduce((acc, curr) => acc + curr, 0);
 
 // Part 1 solution
 console.log("Part 1:", sum);
 
-let sum2 = 0;
-
 const code = /do\(\)|don't\(\)|mul\(\d{1,3},\d{1,3}\)/g;
-const matches2 = input.match(code);
-let filtered_matches: string[] = [];
-if (matches2) {
-  let included = true;
-  for (const elem of matches2) {
-    if (elem === "do()") {
-      included = true;
-    } else if (elem === "don't()") {
-      included = false;
-    } else if (included) {
-      filtered_matches.push(elem);
-    }
-  }
-}
 
-sum2 = filtered_matches.map((match) =>
-  match.slice(4, -1).split(",").map(Number).reduce(
-    (acc, curr) => acc * curr,
-    1,
+const filtered_matches = input
+  .match(code)
+  ?.reduce(
+    (acc, elem) => {
+      if (elem === "do()") acc.included = true;
+      else if (elem === "don't()") acc.included = false;
+      else if (acc.included) acc.filtered.push(elem);
+      return acc;
+    },
+    { included: true, filtered: [] as string[] },
+  ).filtered ?? [];
+
+const sum2 = filtered_matches
+  .map((match) =>
+    match
+      .slice(4, -1)
+      .split(",")
+      .map(Number)
+      .reduce((acc, curr) => acc * curr, 1)
   )
-).reduce((acc, curr) => acc + curr, 0);
+  .reduce((acc, curr) => acc + curr, 0);
 
 // Part 2 solution
 console.log("Part 2:", sum2);
