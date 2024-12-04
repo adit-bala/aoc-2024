@@ -3,61 +3,55 @@
 const input = await Deno.readTextFile("./input.txt");
 const testinput = await Deno.readTextFile("./test.txt");
 
-
 // Split the input into lines and skip the first line (AOC INPUT FETCHED marker)
-const lines = input.split("\n").slice(1);
+const lines = input.split("\n");
 const testlines = testinput.split("\n");
 
-let left = [];
-let right = [];
-
-// Your code here
-for (let i = 0; i < lines.length; i++) {
-  const line = lines[i];
-  // Process each line of the input
-  const [l, r] = line.trim().split("  ");
-  const leftNum = Number(l);
-  const rightNum = Number(r);
-  if (isNaN(leftNum) || isNaN(rightNum)) {
-    console.error(`Invalid line ${i + 1}: "${line}"`);
-    continue;
-  }
-
-  left.push(leftNum);
-  right.push(rightNum);
-
-}
-
-left.sort();
-right.sort();
-
-console.log(left);
-console.log(right);
-
-let sum = 0;
-
-for (let i = 0; i < left.length; i++) {
-  //console.log(left[i], right[i]);
-  sum += Math.abs(left[i] - right[i]);
-}
+const sum = input
+  .split("\n")
+  .map((line) => line.trim().split("  ").map(Number))
+  .filter(([l, r]) => !isNaN(l) && !isNaN(r))
+  .reduce(
+    (acc, [left, right], _, arr) => {
+      acc.left.push(left);
+      acc.right.push(right);
+      if (arr.length === acc.left.length) {
+        acc.left.sort((a, b) => a - b);
+        acc.right.sort((a, b) => a - b);
+        acc.sum = acc.left.reduce(
+          (sum, l, i) => sum + Math.abs(l - acc.right[i]),
+          0,
+        );
+      }
+      return acc;
+    },
+    { left: [] as number[], right: [] as number[], sum: 0 as number },
+  ).sum;
 
 // Part 1 solution
 console.log("Part 1:", sum);
 
-const freq : Record<number, number> = {};
+const sum2 = input
+  .split("\n")
+  .map((line) => line.trim().split("  ").map(Number))
+  .filter(([l, r]) => !isNaN(l) && !isNaN(r))
+  .reduce(
+    (acc, [left, right], _, arr) => {
+      acc.left.push(left);
+      acc.freq[right] = (acc.freq[right] || 0) + 1;
+      if (arr.length === acc.left.length) {
+        acc.sum = acc.left.reduce(
+          (sum, l) => sum + (l * (acc.freq[l] || 0)),
+          0,
+        );
+      }
+      return acc;
+    },
+    {
+      left: [] as number[],
+      freq: {} as Record<number, number>,
+      sum: 0 as number,
+    },
+  ).sum;
 
-sum = 0;
-
-for (const element of right) {
-  freq[element] = (freq[element] || 0) + 1;
-}
-
-for (const element of left) {
-  if (freq[element] > 0) {
-    sum += element * freq[element];
-  }
-}
-
-
-// Part 2 solution
-console.log("Part 2:", sum);
+console.log("Similarity Score:", sum2);
